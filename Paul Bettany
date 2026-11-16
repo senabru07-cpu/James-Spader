@@ -4,35 +4,86 @@
 
 #include <Servo.h>
 
-Servo myservo; 
+Servo myservoUltron; 
+Servo myservoCar;
+Servo myservoSokovia;
+Servo myservoFire;
+
+const int BedbuttonPin = 8;
+const int BedLEDPin = A0;
+
+const int InternetbuttonPin = 7;
+const int InternetLEDPin = A3;
+
+const int FriendbuttonPin = 13;
 const int CarbuttonPin = 2;
 const int SokoviabuttonPin = 4;
+const int UltronbuttonPin = 12;
+const int FloorbuttonPin = 6;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  myservo.attach(9);
+
+  pinMode(BedbuttonPin, INPUT);
+  pinMode(BedLEDPin, OUTPUT);
+
+  myservoUltron.attach(3);
+  pinMode(FriendbuttonPin, INPUT);
+
+  myservoCar.attach(9);
   pinMode(CarbuttonPin, INPUT);
-  myservo.attach(10);
+
+  myservoSokovia.attach(10);
   pinMode(SokoviabuttonPin, INPUT);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (digitalRead(CarbuttonPin) == HIGH){
-    myservo.write(180);
-
+  if (digitalRead(BedbuttonPin) == LOW){
+    digitalWrite(BedLEDPin, HIGH);
   } else {
-    myservo.write(0);
+    digitalWrite(BedLEDPin, LOW);
   }
 
-  if (digitalRead(SokoviabuttonPin) == LOW){
-    myservo.write(90);
+  if (digitalRead(InternetbuttonPin) == HIGH){
+    digitalWrite(InternetLEDPin, HIGH);
+  } else {
+    digitalWrite(InternetLEDPin, LOW);
+  }
+
+  // put your main code here, to run repeatedly:
+  if (digitalRead(FriendbuttonPin) == HIGH){
+    myservoUltron.write(180);
+  } else {
+    myservoUltron.write(90);
+  }
+
+  if (digitalRead(CarbuttonPin) == HIGH){
+    myservoCar.write(180);
+  } else {
+    myservoCar.write(0);
+  }
+
+  if ((digitalRead(SokoviabuttonPin) == HIGH) && (digitalRead(UltronbuttonPin) == HIGH)){
+    myservoSokovia.write(-180);
     Serial.println("glibby");
   } else {
-    myservo.write(-180);
+    myservoSokovia.write(90);
     Serial.println("Gloobs");
   }
+
+  if ((digitalRead(UltronbuttonPin) == LOW) && (digitalRead(FloorbuttonPin) == LOW)){
+    myservoSokovia.write(180);
+  } else {
+    myservoSokovia.write(90);
+  }
+
+  if (digitalRead(FloorbuttonPin) == HIGH){
+    myservoFire.write(180);
+  } else {
+    myservoFire.write(90);
+  }
+
 }
 
