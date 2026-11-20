@@ -10,14 +10,14 @@ Servo myservoSokovia;
 Servo myservoFire;
 
 const int BedbuttonPin = 8;
-const int BedLEDPin = A0;
+const int BedLEDPin = 4;
 
 const int InternetbuttonPin = 7;
-const int InternetLEDPin = A3;
+const int InternetLEDPin = 5;
 
 const int FriendbuttonPin = 13;
 const int CarbuttonPin = 2;
-const int SokoviabuttonPin = 4;
+const int SokoviabuttonPin = 1;
 const int UltronbuttonPin = 12;
 const int FloorbuttonPin = 6;
 
@@ -37,6 +37,9 @@ void setup() {
   myservoSokovia.attach(10);
   pinMode(SokoviabuttonPin, INPUT);
 
+  myservoFire.attach(11);
+  pinMode(FloorbuttonPin, INPUT);
+
 }
 
 void loop() {
@@ -48,8 +51,10 @@ void loop() {
 
   if (digitalRead(InternetbuttonPin) == HIGH){
     digitalWrite(InternetLEDPin, HIGH);
+
   } else {
     digitalWrite(InternetLEDPin, LOW);
+
   }
 
   // put your main code here, to run repeatedly:
@@ -61,23 +66,25 @@ void loop() {
 
   if (digitalRead(CarbuttonPin) == HIGH){
     myservoCar.write(180);
+    Serial.println("jebba");
+
   } else {
     myservoCar.write(0);
+    Serial.println("jeers");
+
   }
 
-  if ((digitalRead(SokoviabuttonPin) == HIGH) && (digitalRead(UltronbuttonPin) == HIGH)){
+  if ((analogRead(SokoviabuttonPin) == HIGH)){ // && (digitalRead(UltronbuttonPin) == HIGH)) {
     myservoSokovia.write(-180);
-    Serial.println("glibby");
   } else {
     myservoSokovia.write(90);
-    Serial.println("Gloobs");
   }
 
-  if ((digitalRead(UltronbuttonPin) == LOW) && (digitalRead(FloorbuttonPin) == LOW)){
-    myservoSokovia.write(180);
-  } else {
-    myservoSokovia.write(90);
-  }
+ // if ((digitalRead(UltronbuttonPin) == LOW) && (digitalRead(FloorbuttonPin) == LOW)){
+ //   myservoSokovia.write(180);
+ // } else {
+ //   myservoSokovia.write(90);
+//  }
 
   if (digitalRead(FloorbuttonPin) == HIGH){
     myservoFire.write(180);
